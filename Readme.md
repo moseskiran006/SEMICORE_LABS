@@ -30,15 +30,15 @@ Develop an AI model to detect vehicles and empty parking slots from images or vi
 
 4. **Performance**:
    - Achieved xx FPS on NVIDIA GPU.
-   - Detection accuracy: xx% for vehicles, xx% for empty slots.
+   - Detection accuracy: 97.6% for vehicles, 98% for empty slots.
 
 5. **Output**:
    - A video demo is available [here](https://drive.google.com/drive/folders/1CNg4n0BXe8yH-33737MnAcIHWjzOeI0y?usp=sharing) showing detection performance.
 
 ### Files
 - `source_code/`: Contains the model training and inference scripts.
-- `weights/`: YOLOv5 trained weights.
-- `demo_video/`: Link to demo video showcasing the results.
+- `weights/`: YOLOv11 trained weights.
+
 
 ---
 
