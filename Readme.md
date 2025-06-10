@@ -22,7 +22,7 @@ Develop an AI model to detect vehicles and empty parking slots from images or vi
    - Split data into training and validation sets.
 
 2. **Model Training**: 
-   - Fine-tune the YOLOv5 model using transfer learning for detecting cars and empty slots.
+   - Fine-tune the YOLOv11 model using transfer learning for detecting cars and empty slots.
    - Hyperparameters were adjusted for better precision and recall.
 
 3. **Inference**:
