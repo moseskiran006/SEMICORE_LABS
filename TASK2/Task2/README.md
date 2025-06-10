@@ -5,7 +5,7 @@ This project implements an intelligent vehicle parking detection system that cla
 
 Parking Detection Demo
 Real-time parking space detection showing occupied and vacant spaces with confidence scores
-the Drive link is here
+the Drive link for demo videos and result videos is here
 ```bash
 https://drive.google.com/drive/folders/1CNg4n0BXe8yH-33737MnAcIHWjzOeI0y?usp=sharing
 ```
