@@ -48,3 +48,59 @@ Inference Pipeline Optimization:
 Multi-threading for concurrent request handling
 Connection pooling for database operations
 Caching mechanism for repeated requests
+
+Resource Usage Analysis
+BASH
+
+## Memory profiling results
+```bash
+CPU Usage: 45-60% (during active inference)
+RAM Usage: 150MB (base) + 50MB (per concurrent request)
+GPU Usage: 0% (CPU-only deployment)
+
+Storage: 22MB (model) + 15MB (dependencies)
+```
+
+## Quick Start
+Prerequisites
+Python 3.8+
+CUDA 11.8+ (optional, for GPU acceleration)
+Minimum 4GB RAM
+1GB free storage
+## Installation
+Clone the repository:
+
+```bash
+
+git clone https://github.com/moseskiran006/SEMICORE_LABS.git
+cd TASK2/Task2
+```
+## Create virtual environment:
+
+```bash
+
+# Using conda (recommended)
+conda env create -f environment.yml
+conda activate parking-detection
+
+# Or using pip
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+```
+
+Run the application:
+
+```bash
+
+python app.py
+Access the web interface:
+Open http://localhost:5000 in your browser
+```
+
+## 🙏 Acknowledgments
+PKLot Dataset: Federal University of Paraná (UFPR)
+YOLOv11: Ultralytics team
+ONNX Runtime: Microsoft
+Flask Framework: Pallets Projects
