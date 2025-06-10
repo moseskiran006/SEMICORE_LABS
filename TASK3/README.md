@@ -61,3 +61,33 @@ from google.colab import drive
 drive.mount('/content/drive')
 ```
 
+## Dependencies & Environment
+Environment: Google Colab with T4 GPU (Runtime > Change runtime type > T4 GPU).
+
+Hardware: No specific drivers required (Colab provides NVIDIA T4 GPU and CUDA).
+
+Storage: 10 GB free space (6.9 GB for UCF101, additional for frames and model outputs).
+
+Python Packages: Listed in requirements.txt with exact versions, installed in Colab.
+
+## requirements.txt
+
+
+```bash
+ultralytics==8.3.15
+opencv-python-headless==4.10.0.84
+rarfile==4.2
+tqdm==4.66.5
+torch==2.4.1
+torchvision==0.19.1
+requests==2.32.3
+```
+
+## Installation
+
+```bash
+!pip install -r requirements.txt
+!apt-get install unrar
+```
+
+
