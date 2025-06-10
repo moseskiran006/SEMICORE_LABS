@@ -35,6 +35,7 @@
             justify-content: center;
             margin-bottom: 30px;
             border-bottom: 2px solid #e2e8f0;
+            flex-wrap: wrap;
         }
         
         .tab-button {
@@ -142,6 +143,10 @@
             background: #e53e3e;
         }
         
+        .control-btn.phone {
+            background: #9f7aea;
+        }
+        
         .results-section {
             margin-top: 30px;
         }
@@ -186,7 +191,6 @@
             gap: 15px;
         }
         
-    
         .parking-card {
             background: white;
             padding: 15px;
@@ -210,6 +214,7 @@
         .media-container {
             text-align: center;
             margin: 20px 0;
+            position: relative;
         }
         
         .result-media {
@@ -280,6 +285,83 @@
             color: #742a2a;
             border: 1px solid #e53e3e;
         }
+        
+        /* Phone camera specific styles */
+        #phone-video {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        #phone-canvas {
+            display: none;
+        }
+        
+        .camera-selector {
+            margin: 10px 0;
+        }
+        
+        .camera-selector select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #cbd5e0;
+            font-size: 14px;
+        }
+        
+        .phone-stats {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .phone-stat {
+            text-align: center;
+        }
+        
+        .phone-stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        
+        .phone-stat-label {
+            color: #718096;
+            font-size: 0.9em;
+        }
+        
+        .detection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .tab-button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .control-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -290,6 +372,7 @@
             <button class="tab-button active" onclick="switchTab('image')">📸 Image Detection</button>
             <button class="tab-button" onclick="switchTab('video')">🎥 Video Detection</button>
             <button class="tab-button" onclick="switchTab('webcam')">📹 Live Webcam</button>
+            <button class="tab-button" onclick="switchTab('phone')">📱 Phone Camera</button>
         </div>
 
         <!-- Image Detection Tab -->
@@ -319,7 +402,7 @@
                 <form method="POST" enctype="multipart/form-data" id="videoForm">
                     <input type="hidden" name="detection_type" value="video">
                     <div class="file-input-wrapper">
-                        <input type="file" name="video" accept="video/*" required class="file-input" id="videoFile">
+                                                <input type="file" name="video" accept="video/*" required class="file-input" id="videoFile">
                         <label for="videoFile" class="file-input-button">🎬 Choose Video</label>
                     </div>
                     <br>
@@ -351,6 +434,56 @@
             </div>
         </div>
 
+        <!-- Phone Camera Detection Tab -->
+        <div id="phone-tab" class="tab-content">
+            <div class="upload-section">
+                <h3>📱 Phone Camera Detection</h3>
+                <div class="webcam-controls">
+                    <button id="start-phone-camera" onclick="startPhoneCamera()" class="control-btn phone">📱 Start Phone Camera</button>
+                    <button id="stop-phone-camera" onclick="stopPhoneCamera()" class="control-btn stop" style="display:none;">⏹️ Stop Camera</button>
+                </div>
+                
+                <!-- Camera selector for mobile devices -->
+                <div class="camera-selector" id="camera-selector" style="display:none;">
+                    <label for="camera-select">Select Camera: </label>
+                    <select id="camera-select" onchange="switchCamera()">
+                        <option value="">Loading cameras...</option>
+                    </select>
+                </div>
+                
+                <div id="phone-camera-container" style="display:none;">
+                    <div class="media-container">
+                        <video id="phone-video" autoplay playsinline></video>
+                        <canvas id="phone-canvas"></canvas>
+                        <canvas id="detection-overlay" class="detection-overlay"></canvas>
+                    </div>
+                    
+                    <div class="phone-stats">
+                        <div class="phone-stat">
+                            <div class="phone-stat-value" id="phone-fps">0</div>
+                            <div class="phone-stat-label">FPS</div>
+                        </div>
+                        <div class="phone-stat">
+                            <div class="phone-stat-value" id="phone-occupied">0</div>
+                            <div class="phone-stat-label">Occupied</div>
+                        </div>
+                        <div class="phone-stat">
+                            <div class="phone-stat-value" id="phone-empty">0</div>
+                            <div class="phone-stat-label">Empty</div>
+                        </div>
+                        <div class="phone-stat">
+                            <div class="phone-stat-value" id="phone-total">0</div>
+                            <div class="phone-stat-label">Total</div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info" id="phone-status">
+                        📱 Using phone camera for detection
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Results Section -->
         {% if result_type %}
         <div class="results-section">
@@ -376,7 +509,7 @@
                 </div>
                 
                 <!-- Status Alert -->
-                {% set occupancy_rate = (parking_stats.occupied / parking_stats.total * 100) %}
+                {% set occupancy_rate = (parking_stats.occupied / parking_stats.total * 100) if parking_stats.total > 0 else 0 %}
                 {% if occupancy_rate > 90 %}
                     <div class="alert alert-danger">
                         🚫 Parking lot is FULL ({{ "%.1f"|format(occupancy_rate) }}% occupied)
@@ -431,6 +564,14 @@
     <script>
         let webcamInterval;
         let isWebcamActive = false;
+        let phoneStream = null;
+        let phoneVideo = null;
+        let phoneCanvas = null;
+        let phoneContext = null;
+        let isPhoneCameraActive = false;
+        let phoneFrameInterval = null;
+        let currentCameraId = null;
+        let cameras = [];
 
         function switchTab(tabName) {
             // Hide all tabs
@@ -450,6 +591,11 @@
             // Stop webcam if switching away from webcam tab
             if (tabName !== 'webcam' && isWebcamActive) {
                 stopWebcam();
+            }
+            
+            // Stop phone camera if switching away from phone tab
+            if (tabName !== 'phone' && isPhoneCameraActive) {
+                stopPhoneCamera();
             }
         }
 
@@ -503,6 +649,212 @@
                 });
         }
 
+        // Phone camera functions
+        async function startPhoneCamera() {
+            try {
+                phoneVideo = document.getElementById('phone-video');
+                phoneCanvas = document.getElementById('phone-canvas');
+                phoneContext = phoneCanvas.getContext('2d');
+                
+                // Get available cameras
+                await enumerateCameras();
+                
+                // Request camera access with rear camera preference for mobile
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280, max: 1920 },
+                        height: { ideal: 720, max: 1080 },
+                        facingMode: { ideal: "environment" } // Use rear camera on mobile
+                    }
+                };
+                
+                phoneStream = await navigator.mediaDevices.getUserMedia(constraints);
+                phoneVideo.srcObject = phoneStream;
+                
+                // Set canvas size to match video
+                phoneVideo.onloadedmetadata = () => {
+                    phoneCanvas.width = phoneVideo.videoWidth;
+                    phoneCanvas.height = phoneVideo.videoHeight;
+                    document.getElementById('detection-overlay').width = phoneVideo.videoWidth;
+                    document.getElementById('detection-overlay').height = phoneVideo.videoHeight;
+                };
+                
+                document.getElementById('phone-camera-container').style.display = 'block';
+                document.getElementById('start-phone-camera').style.display = 'none';
+                document.getElementById('stop-phone-camera').style.display = 'inline-block';
+                
+                isPhoneCameraActive = true;
+                
+                // Start sending frames to server
+                phoneFrameInterval = setInterval(sendPhoneFrame, 200); // Send frame every 200ms (5 FPS)
+                
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Error accessing camera. Please ensure you have granted camera permissions.');
+            }
+        }
+
+        function stopPhoneCamera() {
+            if (phoneStream) {
+                phoneStream.getTracks().forEach(track => track.stop());
+                phoneStream = null;
+            }
+            
+            if (phoneFrameInterval) {
+                clearInterval(phoneFrameInterval);
+                phoneFrameInterval = null;
+            }
+            
+            isPhoneCameraActive = false;
+            document.getElementById('phone-camera-container').style.display = 'none';
+            document.getElementById('start-phone-camera').style.display = 'inline-block';
+            document.getElementById('stop-phone-camera').style.display = 'none';
+            document.getElementById('camera-selector').style.display = 'none';
+        }
+
+        async function enumerateCameras() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                cameras = devices.filter(device => device.kind === 'videoinput');
+                
+                const cameraSelect = document.getElementById('camera-select');
+                cameraSelect.innerHTML = '';
+                
+                cameras.forEach((camera, index) => {
+                    const option = document.createElement('option');
+                    option.value = camera.deviceId;
+                    option.text = camera.label || `Camera ${index + 1}`;
+                    cameraSelect.appendChild(option);
+                });
+                
+                if (cameras.length > 1) {
+                    document.getElementById('camera-selector').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error enumerating cameras:', error);
+            }
+        }
+
+        async function switchCamera() {
+            const cameraSelect = document.getElementById('camera-select');
+            const selectedCameraId = cameraSelect.value;
+            
+                        if (selectedCameraId && phoneStream) {
+                // Stop current stream
+                phoneStream.getTracks().forEach(track => track.stop());
+                
+                // Start with new camera
+                const constraints = {
+                    video: {
+                        deviceId: { exact: selectedCameraId },
+                        width: { ideal: 1280, max: 1920 },
+                        height: { ideal: 720, max: 1080 }
+                    }
+                };
+                
+                try {
+                    phoneStream = await navigator.mediaDevices.getUserMedia(constraints);
+                    phoneVideo.srcObject = phoneStream;
+                } catch (error) {
+                    console.error('Error switching camera:', error);
+                    alert('Error switching camera');
+                }
+            }
+        }
+
+        // Send frame to server for processing
+        async function sendPhoneFrame() {
+            if (!isPhoneCameraActive || !phoneVideo.videoWidth) return;
+            
+            // Draw current frame to canvas
+            phoneContext.drawImage(phoneVideo, 0, 0, phoneCanvas.width, phoneCanvas.height);
+            
+            // Convert canvas to blob
+            phoneCanvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('frame', blob, 'frame.jpg');
+                
+                try {
+                    const response = await fetch('/process_phone_frame', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    // Update UI with results
+                    document.getElementById('phone-fps').textContent = result.fps ? result.fps.toFixed(2) : '0';
+                    document.getElementById('phone-occupied').textContent = result.occupied || 0;
+                    document.getElementById('phone-empty').textContent = result.empty || 0;
+                    document.getElementById('phone-total').textContent = (result.occupied || 0) + (result.empty || 0);
+                    
+                    // Draw bounding boxes on overlay canvas
+                    if (result.detections) {
+                        drawDetections(result.detections);
+                    }
+                    
+                    // Update status
+                    updatePhoneStatus(result);
+                    
+                } catch (error) {
+                    console.error('Error sending frame:', error);
+                }
+            }, 'image/jpeg', 0.8);
+        }
+
+        function drawDetections(detections) {
+            const overlayCanvas = document.getElementById('detection-overlay');
+            const overlayContext = overlayCanvas.getContext('2d');
+            
+            // Clear previous detections
+            overlayContext.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            
+            // Draw each detection
+            detections.forEach(det => {
+                const [x1, y1, x2, y2] = det.box;
+                const width = x2 - x1;
+                const height = y2 - y1;
+                
+                // Set color based on class
+                if (det.class === 'occupied') {
+                    overlayContext.strokeStyle = '#e53e3e';
+                    overlayContext.fillStyle = 'rgba(229, 62, 62, 0.3)';
+                } else {
+                    overlayContext.strokeStyle = '#48bb78';
+                    overlayContext.fillStyle = 'rgba(72, 187, 120, 0.3)';
+                }
+                
+                // Draw box
+                overlayContext.lineWidth = 3;
+                overlayContext.strokeRect(x1, y1, width, height);
+                overlayContext.fillRect(x1, y1, width, height);
+                
+                // Draw label
+                overlayContext.fillStyle = overlayContext.strokeStyle;
+                overlayContext.fillRect(x1, y1 - 25, width, 25);
+                overlayContext.fillStyle = 'white';
+                overlayContext.font = '16px Arial';
+                overlayContext.fillText(`${det.class}: ${(det.confidence * 100).toFixed(0)}%`, x1 + 5, y1 - 7);
+            });
+        }
+
+        function updatePhoneStatus(result) {
+            const statusDiv = document.getElementById('phone-status');
+            const total = (result.occupied || 0) + (result.empty || 0);
+            const occupancyRate = total > 0 ? (result.occupied / total * 100) : 0;
+            
+            if (occupancyRate > 90) {
+                statusDiv.className = 'alert alert-danger';
+                statusDiv.innerHTML = `🚫 Parking lot is FULL (${occupancyRate.toFixed(1)}% occupied)`;
+            } else if (occupancyRate > 70) {
+                statusDiv.className = 'alert alert-warning';
+                statusDiv.innerHTML = `⚠️ Parking lot is BUSY (${occupancyRate.toFixed(1)}% occupied)`;
+            } else {
+                statusDiv.className = 'alert alert-success';
+                statusDiv.innerHTML = `✅ Parking spaces AVAILABLE (${occupancyRate.toFixed(1)}% occupied)`;
+            }
+        }
+
         // Show loading animations
         document.getElementById('imageForm').addEventListener('submit', function() {
             document.getElementById('imageLoading').style.display = 'block';
@@ -532,6 +884,49 @@
                 }
             }
         }, 100);
+
+        // Check if running on mobile device
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Auto-switch to phone camera tab on mobile devices
+        window.addEventListener('DOMContentLoaded', function() {
+            if (isMobileDevice()) {
+                // Add a small delay to ensure everything is loaded
+                setTimeout(() => {
+                    const phoneTabButton = document.querySelector('.tab-button:nth-child(4)');
+                    if (phoneTabButton) {
+                        phoneTabButton.click();
+                    }
+                }, 100);
+            }
+        });
+
+        // Handle visibility change to pause/resume camera
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Page is hidden, pause camera operations
+                if (phoneFrameInterval) {
+                    clearInterval(phoneFrameInterval);
+                }
+            } else {
+                // Page is visible again, resume camera operations
+                if (isPhoneCameraActive) {
+                    phoneFrameInterval = setInterval(sendPhoneFrame, 200);
+                }
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (isWebcamActive) {
+                stopWebcam();
+            }
+            if (isPhoneCameraActive) {
+                stopPhoneCamera();
+            }
+        });
     </script>
 </body>
 </html>
