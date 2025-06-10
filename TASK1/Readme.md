@@ -25,8 +25,8 @@ Develop an AI model to identify the total number of vehicles parked and availabl
 ## Setup Instructions
 
 - **Environment Setup**:
-  - Provide a `requirements.txt` or `environment.yml` file listing all necessary Python packages.
-  - If using conda, include an `environment.yml` for easy setup.
+  - Provided a `requirements.txt`  file listing all necessary Python packages.
+ 
 
 ### Using pip:
 ```shell
