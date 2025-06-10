@@ -33,15 +33,27 @@ Develop an AI model to identify the total number of vehicles parked and availabl
 pip install -r requirements.txt
 ```
 How to Run
-Training:
-
-Navigate to the directory and run python train.py for training the model with your dataset.
+Preparing Data:
+```bash
+python  data_preprocessing.py
+```
+For Training:
+```bash
+python train.py
+```
 Validation:
 
-To validate the model, execute python validate.py.
+```bash
+python validate.py
+```
 Inference:
-
-For performing inference on new data, use python inference.py.
+```bash
+!python validate.py --weights /content/Task1_VehicleDetection/weights/parking_detector_20250610_075747/weights/best.pt --test_image /content/Task1_VehicleDetection/detect.jpg
+```
+ Evaluation :
+ ```bash
+python evaluate.py
+```
 Results
 Achieved superior detection precision and recall.
 The model processes images and videos with high accuracy.
