@@ -5,11 +5,11 @@ Train a YOLOv11n model to detect humans performing specific actions in videos, u
 Dataset
 Name: UCF101
 
-Description: UCF101 is an action recognition dataset containing 13,320 videos across 101 action categories, collected from YouTube. For this project, a subset of five categories is used: TrampolineJumping, IceDancing, Skiing, Snowboarding (falling-like), and WalkingWithDog (loitering-like).
+## Description: UCF101 is an action recognition dataset containing 13,320 videos across 101 action categories, collected from YouTube. For this project, a subset of five categories is used: TrampolineJumping, IceDancing, Skiing, Snowboarding (falling-like), and WalkingWithDog (loitering-like).
 
-Source: UCF101 Dataset
+## Source: UCF101 Dataset
 
-##Citation:
+### Citation:
 ``bash
 @article{soomro2012ucf101,
   title={UCF101: A dataset of 101 human actions classes from videos in the wild},
