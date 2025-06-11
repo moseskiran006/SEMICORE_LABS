@@ -12,6 +12,13 @@ Develop an AI model to identify the total number of vehicles parked and availabl
 - **Dataset**: Used the PKLot dataset, which provides realistic images of parking areas.
 - **Fine-tuning**: Conducted thorough fine-tuning on YOLOv11n using the PKLot data, resulting in improved detection capabilities.
 
+
+
+## Data Directory: Contains datasets for model training and testing.
+Weights: (best3.pt) Fine-tuned model weights for inference.
+
+
+
 ## Files and Structure
 
 - **Data Directory**: Contains datasets for model training and testing.
@@ -55,6 +62,13 @@ Inference:
  ```bash
 python evaluate.py
 ```
+
+## Model Performance
+### Inference Speed: Optimized for fast processing on both CPU and GPU, ensuring real-time performance.
+### Memory Utilization: Efficient memory usage allows for deployment on standard hardware.
+### Demonstration & Documentation
+ Clarity: This README provides clear instructions to reproduce results.
+Demo Quality: A comprehensive demo video showcases the model's performance effectively.
 Results
 Achieved superior detection precision and recall.
 The model processes images and videos with high accuracy.
