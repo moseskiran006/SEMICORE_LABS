@@ -97,6 +97,8 @@ Run the application:
 python app.py
 Access the web interface:
 Open http://localhost:5000 in  browser
+if you want to open it in your phone use the ip address of your computer
+http://<ip-computer>:5000
 ```
 
 ## 🙏 Acknowledgments
