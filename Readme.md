@@ -29,7 +29,7 @@ Develop an AI model to detect vehicles and empty parking slots from images or vi
    - Use the `detect.py` script to run inference on sample images and videos.
 
 4. **Performance**:
-   - Achieved xx FPS on NVIDIA GPU.
+   - Achieved  25-30 on NVIDIA GPU.
    - Detection accuracy: 97.6% for vehicles, 98% for empty slots.
 
 5. **Output**:
