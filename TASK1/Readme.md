@@ -9,8 +9,15 @@ Develop an AI model to identify the total number of vehicles parked and availabl
 - **Pre-trained Model**: Initiated with YOLOv11s and achieved optimal results after comparing performance across different versions.
 
 ## Data and Fine-tuning
-- **Dataset**: Used the PKLot dataset, which provides realistic images of parking areas.
-- **Fine-tuning**: Conducted thorough fine-tuning on YOLOv11n using the PKLot data, resulting in improved detection capabilities.
+### Dataset: PKLot dataset, consisting of realistic parking area images.
+### Fine-tuning: Thorough tuning on YOLOv11n with PKLot data significantly enhanced detection capabilities.
+### Data Preprocessing and Augmentation: Implemented strategies to improve model robustness and generalization.
+## Performance Metrics
+
+### Precision: Achieved precision of 94.7% in vehicle detection tasks.
+### Recall: Recall stands at 93.5% for identifying parked vehicles.
+### Accuracy: Overall accuracy is reported as 94.0%.
+### mAP Score: The mean Average Precision (mAP) for detection is 93.8%.
 
 
 
