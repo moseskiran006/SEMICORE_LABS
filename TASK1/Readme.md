@@ -2,6 +2,7 @@
 
 ## Objective
 Develop an AI model to identify the total number of vehicles parked and available parking slots from images or videos.
+##  result video and images  are available [here](https://drive.google.com/drive/folders/1CNg4n0BXe8yH-33737MnAcIHWjzOeI0y?usp=sharing) showing detection performance.
 
 ## Technologies Used
 - **Model Backbone**: YOLOv11s, chosen after experimenting with various YOLO versions due to its high accuracy and efficiency.
