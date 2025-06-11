@@ -89,5 +89,13 @@ requests==2.32.3
 !pip install -r requirements.txt
 !apt-get install unrar
 ```
+## now run the colab script
+```bash
+complete_Task3_execution.ipynb file
+```
+## For Inference use this command 
+```bash
+python /content/validate.py --weights /content/task3best.pt --test_video /content/m.mp4 --output /content/validation_results
+```
 
 
