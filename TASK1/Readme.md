@@ -52,24 +52,37 @@ Preparing Data:
 ```bash
 python  data_preprocessing.py
 ```
-For Training:
+## For Training:
 ```bash
 python train.py
 ```
-Validation:
+## Validation:
 
 ```bash
 python validate.py
 ```
-Inference:
+## Image_Inference:
 ```bash
 !python validate.py --weights /content/Task1_VehicleDetection/weights/parking_detector_20250610_075747/weights/best.pt --test_image /content/Task1_VehicleDetection/detect.jpg
 ```
+## Video_inference:
  Evaluation :
  ```bash
 python evaluate.py
 ```
+```bash
+# Standard detection
+python Video_validation.py --weight path/to/ptfile --video /path_to_video --conf 0.2
 
+# Sliding window (best for edges)
+python video_validation.py --weight /path_to_ptfile --video /path_to_video/ --method sliding --conf 0.2
+
+# All methods combined (most comprehensive)
+python video_validate.py --weight /path_to_ptfile --video /path_to_vides/ --method all --conf 0.15
+
+For the simple edge-focused version:
+python video_validate.py --weight /path_to_ptfile --video /path_to_video/ --conf 0.2
+```
 ## Model Performance
 ### Inference Speed: Optimized for fast processing on both CPU and GPU, ensuring real-time performance.
 ### Memory Utilization: Efficient memory usage allows for deployment on standard hardware.
