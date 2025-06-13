@@ -4,18 +4,7 @@ import cv2
 from ultralytics import YOLO
 
 def validate_model(weights_path, test_video_path, output_dir, aspect_ratio_threshold=1.0):
-    """
-    Validate YOLOv11n model on a single test video to classify as Fallen or Not Fallen.
-    Classified as 'Fallen' if any frame has a bounding box with width/height > threshold, 
-    and status remains 'Fallen' for all subsequent frames. Outputs an annotated video with 
-    bounding boxes, 'Fallen'/'Not Fallen' labels, and a persistent status bar.
-
-    Args:
-        weights_path (str): Path to trained model weights (e.g., best.pt)
-        test_video_path (str): Path to input test video file
-        output_dir (str): Directory to save output video
-        aspect_ratio_threshold (float): Width/height ratio threshold for 'Fallen' classification
-    """
+    
     # Validate input path
     if not os.path.exists(test_video_path):
         raise FileNotFoundError(f"Video file does not exist: {test_video_path}")
